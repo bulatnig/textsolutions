@@ -1,0 +1,42 @@
+Stack Min: How would you design a stack which, in addition to push and pop, has a function min which returns the minimum element? Push, pop and min should operate in O(1) time.
+
+Examples:
+push 4   min 4
+push 3   min 3
+push 5   min 3
+pop      min 3
+pop      min 4
+pop      min None
+
+
+Questions:
+- Can I use regular stack for implementing this new kind?
+- What methods should do if stack is empty?
+
+Solution 1
+Build this new MinStack based on two regular stacks, first containing the values and second containing the min element of the stack corresponding to value inserted. When we add element to empty stack add it to both stacks. When we add element to non-empty stack, add element to values stack. For min stack compare new value with previous and put min of two into min stack. When we remove element, remove elements from both stacks returning the value. 
+
+Implementation
+
+
+class MinStack:
+
+    def __init__(self):
+        self.values = []
+        self.mins = []
+
+    def push(self, value: Any) -> None:
+        self.values.append(value)
+        prev_min = self.min()
+        new_min = value if not prev_min or value < prev_min else prev_min
+        self.mins.append(new_min)
+
+    def pop(self) -> Optional[Any]:
+        if not self.values:
+            return None
+        self.mins.pop()
+        return self.values.pop()
+
+    def min(self) -> Optional[Any]:
+        return self.mins[-1] if self.mins else None
+

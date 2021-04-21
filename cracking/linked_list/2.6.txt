@@ -1,0 +1,53 @@
+Palindrome: Implement a function to check if a linked list is a palindrome.
+
+Examples:
+a -> b -> a = Yes
+a -> b -> b -> a = Yes
+a -> a -> b = No
+a = Yes
+
+Questions:
+- is empty string a palindrome? - No
+- is each element of the list a character? - Yes
+- is it singly or doubly linked list? Singly
+
+Solution 1 (for doubly linked list)
+Use two pointers, one at the start and second at the end of the list. Move both pointers to the middle of the list, checking elements are equal. Iterate until both pointers are not the same (pointing to same element) or both pointers next element is other pointer.
+
+Solution 2 (for singly linked list)
+Iterate through the list and create a copy but in reverse order. Iterate both lists at the same time and ensure elements are equal on each step. Runtime O(N). Extra memory is O(N).
+
+Solution 2.1
+Count the number of elements along iterating the list for copying. During comparing the elements phase go only through the half of the elements.
+
+Solution 3 (if changing input list allowed)
+Count the number of elements in the list. Then through recursion iterate to the middle of the list. Emulate two pointers:
+ - first, retrieved by going back through recursion
+ - second, going forward, returned by recursion function
+Handle the middle in both cases when there are even and odd number of elements. Runtime O(N). Extra memory is O(1) or O(N) if we count each recursive call.
+
+We can't do better than O(N) because we have to visit each element to ensure it's a palindrome.
+
+Implementation of solution 2
+
+
+def is_palindrome(input_head: Node) -> bool:
+  if not input_head:
+    return False
+  reverse_head = None
+  node = input_head
+  while node:
+    tmp = node.next
+    node.next = reverse_head
+    reverse_head = node
+    node = tmp
+  forward_node = input_head
+  reverse_node = reverse_head
+  while forward_node:
+    if forward_node.data != reverse_node.data:
+      return False
+    forward_node = forward_node.next
+    reverse_node = reverse_node.next
+  return True
+
+

@@ -1,0 +1,39 @@
+URLify: Write a method to replace all spaces in a string with '%20'. You may assume that the string has sufficient space at the end to hold the additional characters, and that you are given the "true" length of the string. (Note: if implementing in Java, please use a chracter array so that you can perform this operation in place.)
+
+Examples:
+
+Input: "Mr John Smith    ", 13
+Output: "Mr%20John%20Smith"
+
+"", 0 -> ""
+"abcde", 5 -> "abcde"
+"         ", 3  -> "%20%20%20"
+
+Questions:
+
+- Can string have more extra space than required for all spaces replace? For simplicity I suppose no.
+
+Solution 1
+Initialize two variables i pointing to the end of the "true" string, i = 12 and j pointing to the end of the whole string, j = 16. While these two indices are not equal copy character from i to j and move left. '%20' should be copied instead of ' '. Runtime is O(N). Memory O(1).
+
+Can we improve further? Best Conceivable Runtime is O(N)
+
+Implementation
+
+def urlify(s: str, true_length: int) -> str:
+    "TODO document function"
+    array = list(s)
+    i = true_length - 1
+    j = len(array) - 1
+    while i != j:
+        if array[i] == ' ':
+            array[j] = '0'
+            array[j - 1] = '2'
+            array[j - 2] = '%'
+            j -= 2
+        else:
+            array[j] = array[i]
+        i -= 1
+        j -= 1
+    return ''.join(array)
+

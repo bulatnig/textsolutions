@@ -1,0 +1,73 @@
+Animal Shelter: An animal shelter, which holds only dogs and cats, operates on a strictly "first in, first out" basis. People must adopt either the "oldest" (based on arrival time) of all animals at the shelter, or they can select whether they would prefer a dog or a cat (and will receive the oldest animal of that type). They cannot select which specific animal they would like. Create the data structures to maintain this system and implement operations such as enqueue, dequeueAny, dequeueDog, and dequeueCat. You may use the built-in LinkedList data structure.
+
+Examples:
+enqueue dogA
+enqueue catA
+enqueue dogB
+enqueue catB
+
+dequeueAny = dogA
+dequeueDog = dogA
+dequeueCat = catA
+
+enqueue dogA
+enqueue dogB
+enqueue catA
+
+dequeueAny = dogA
+dequeueAny = dogB
+dequeueAny = catA
+
+Questions:
+- none
+
+Solution 1
+Use LinkedList as a Queue. Put all animals into the same LinkedList. Complexity is enqueue O(1), dequeueAny O(1), dequeueDog O(N), dequeueCat O(N) because we may need iterating through all the elements to find out the dog or cat specifically. Or there may be no animal of that type at all.
+
+Solution 2
+Use two LinkedLists for different types of animals. Also use one always incrementing number to denote animal position in the global queue. With each animal store it's number in the global queue. When new animal enqueued the queue number incremented and assigned to that animal. When dequeueAny is called we compare the heads of two queues to find the oldest animal and return it. Complexity is enqueue O(1), dequeueAny O(1), dequeueDog O(1), dequeueCat O(1).
+
+Implementation
+
+from collections import deque
+from typing import Optional
+from dataclasses import dataclass
+
+
+@dataclass
+class Entry:
+    name: str
+    number: int
+
+
+class AnimalShelter:
+
+    def __init__(self):
+        self.sequence = 0
+        self.dogs = deque()
+        self.cats = deque()
+
+    def enqueue(self, type: str, name: str) -> None:
+        self.sequence += 1
+        entry = Entry(name=name, number=self.sequence)
+        queue = self.dogs if "dog" == type else self.cats
+        queue.append(entry)
+
+    def dequeueAny(self) -> Optional[str]:
+        if not self.dogs and not self.cats:
+            return None
+        if not self.dogs:
+            return self.cats.popleft().name
+        if not self.cats:
+            return self.dogs.popleft().name
+        if self.dogs[0].number < self.cats[0].number:
+            return self.dogs.popleft().name
+        else:
+            return self.cats.popleft().name
+
+    def dequeueDog(self) -> Optional[str]:
+        return self.dogs.popleft().name if self.dogs else None
+
+    def dequeueCat(self) -> Optional[str]:
+        return self.cats.popleft().name if self.cats else None
+

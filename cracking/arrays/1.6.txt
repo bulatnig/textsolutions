@@ -1,0 +1,49 @@
+String Compression: Implement a method to perform basic string compression using the counts of repeated characters. For example, the string aabcccccaaa would become a2b1c5a3. If the "compressed" string would not become smaller than the original string, your method should return the original string. You can assume the string has only uppercase and lowercase letters (a-z).
+
+Examples
+
+aabcccccaaa -> a2b1c5a3
+"" -> ""
+a -> a
+aa -> aa
+aaa -> a3
+aaabcde -> aaabcde
+abcdddddd -> a1b1c1d6
+
+Questions:
+ - none
+ 
+Solution 1
+If string length less than 3, then return it as is.
+Iterate through characters, counting each repeating character. When meet new character, add previous character and number of times we met it into result string. By the end of the input string, append number of times we saw last character. Return result string if it's smaller, otherwise return input string. Runtime is O(N), extra memory is O(N) too.
+
+Can we improve this algorithm?
+We can't do faster, because we have to go through all the characters.
+
+Implementation
+
+
+def compress(input: str) -> str:
+  "TODO document function"
+  if len(input) < 3:
+    return input
+  output = []
+  prev = input[0]
+  count = 1
+  for i in range(1, len(input)):
+    c = input[i]
+    if c == prev:
+      count += 1
+    else:
+      output += prev
+      output += str(count)
+      prev = c
+      count = 1
+  output += prev
+  output += str(count)
+  if len(output) < len(input):
+    return ''.join(output)
+  else:
+    return input
+
+

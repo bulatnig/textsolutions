@@ -1,0 +1,52 @@
+Partition: Write code to partition a linked list around a value x, such that all nodes less than x come before all nodes greater than or equal to x. If x is contained within the list, the values of x only need to be after the elements less than x (see below). The partition element x can appear anywhere in the "right partition"; it does not need to appear between the left and right partitions.
+
+Examples:
+Input: 3 -> 5 -> 8 -> 5 -> 10 -> 2 -> 1 [partition 5]
+Output: 3 -> 1 -> 2 -> 10 -> 5 -> 5 -> 8
+
+1,2,3,4    5   ->  1,2,3,4
+5,6,7,8    5   ->  5,6,7,8
+
+Questions:
+
+- none
+
+Solution 1
+Create new linked list to store elements more or equal provided x. Iterate through the input array, removing elements more or equal x from the input list and adding them to the new linked list. After iteration is done, input list will contain only the elements less than x and new list elements more or equal x. Make last element of input array point to first element of new list. Be careful with corner cases, where:
+- all element less than x
+- all elements more or equal x
+Runtime O(N), because we have to iterate through the whole input array.
+
+Implementation
+
+
+def partition(ll: LinkedList, x: int) -> None:
+    right = None
+    # in case first element >= x then we need to change list head pointer
+    while ll.head and ll.head.data >= x:
+        new_head = ll.head.next
+        if right:
+            ll.head.next = right
+        else:
+            ll.head.next = None
+        right = ll.head
+        ll.head = new_head
+    # list was empty or all element were moved to right
+    if not ll.head:
+        ll.head = right
+        return
+    # input list got a head < x, so we iterate through the rest
+    node = ll.head
+    while node.next:
+        if node.next.data >= x:
+            new_next = node.next.next
+            if right:
+                node.next.next = right
+            else:
+                node.next.next = None
+            right = node.next
+            node.next = new_next
+        else:
+            node = node.next
+    node.next = right
+

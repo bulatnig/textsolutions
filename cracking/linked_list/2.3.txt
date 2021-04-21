@@ -1,0 +1,19 @@
+Delete  Middle Node: Implement an algorithm to delete a node in the middle (i.e., any node but the first and last node, not necessarily the exact middle) of a singly linked list, given only access to that node.
+
+Examples:
+Input: the node c from the linked list a->b->c->d->e->f
+Result: nothing is returned, but the new linked list looks like a->b->d->e->f
+
+Questions:
+- none
+
+Solution 1
+Iterate from given node changing each node's value to the next node value. Upon reaching the end delete the last element - assign pointer next of the previous node to None. Runtime O(N)
+
+Implementation
+
+
+def delete_middle_node(node: Node) -> None:
+  node.data = node.next.data
+  node.next = node.next.next
+

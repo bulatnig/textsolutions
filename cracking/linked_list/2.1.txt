@@ -1,0 +1,19 @@
+Remove Dups: Write code to remove duplicates from an unsorted linked list. How would you solve this problem if a temporary buffer is not allowed?
+
+Examples:
+
+1,2,3,2,4,1 -> 1,2,3,4 or 1,3,2,4 or 2,3,4,1 or 3,2,4,1
+a,9,c,a,b -> a,9,c,b or 9,c,a,b
+
+Questions:
+
+- Does it matter if we remove or retain first duplicate element met going from the head of the list?
+
+Solution 1
+
+List having less than 2 elements can't have duplicates by definition. So we don't have to do anything.
+Iterate the list putting each element into a set. If such element already exists in the set, then remove it from the list. Runtime O(N). Extra memory O(N).
+
+Solution 2
+
+Sort linked list first. Then iterate through it, remembering previous item and comparing it to current. If items are duplicates, then remove the current item from the list. Runtime O(N*N) because of sorting and O(1) extra memory.

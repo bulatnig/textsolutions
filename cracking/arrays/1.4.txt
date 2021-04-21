@@ -1,0 +1,47 @@
+Palindrome Permutation: Given a string, write a function to check if it is a permutation of a palindrome. A palindrome is a word or phrase that is the same forwards and backwards. A permutation is a rearrangement of letters. The palindrome does not need to be limited to just dictionary words.
+
+Examples:
+Input: Tact Coa
+Output: True (taco cat, atco cta, etc.)
+
+"" -> False - because there are no words
+"  a  a " -> True (aa) - there might be any number of spaces or other non-letters which should be ignored
+"moMo" -> True (moom, ommo) - algorithm should be case insensitive
+
+
+Questions:
+- what result is expected in case of empty string input? I'll return False
+- how to treat punctuation and other non-characters? I'll ignore them - there might be any number of them
+- what's the alphabet? Do we treat different but interchangeable Unicode characters as the same? I'll use ASCII only for simplicity
+
+Solution 1
+Create counter array of a size of the alphabet used. Iterate through a string character by character. If character is a letter, then increment counter value at the index of character code. Once all character in the string counted, go through the counter array. If the number of odd values is 0 or 1, then string is a permutation of a palindrome. Otherwise it's not. Iterating through the input string is O(N) runtime. Counter array iteration is O(C) runtime and O(C) memory, where C is the number of letters in the alphabet. C doesn't grow with N so we can treat it as a constant. So eventual algorithm runtime is O(N) and extra memory is O(1).
+
+Can we improve this algorithm?
+We can't because to determine if string can be a palindrome we have to check each character, so min runtime is O(N).
+
+Implementation
+
+
+ALPHABET_SIZE = 256
+
+
+def is_palindrome_permutation(s: str) -> bool:
+    "TODO document function"
+    if len(s) == 0:
+        return False
+    counters = [0] * ALPHABET_SIZE
+    for c in s:
+        if c.isalpha():
+            continue
+        idx = ord(c.lower())
+        counters[idx] += 1
+    odd_count = 0
+    for counter in counters:
+        if counter % 2 != 0:
+            odd_count += 1
+    if odd_count > 1:
+        return False
+    else:
+        return True
+

@@ -1,0 +1,40 @@
+Three in One: Describe how you could use a single array to implement three stacks.
+
+Examples:
+
+Questions:
+- Can we add/remove to/from different stacks independently or every operation is a tuple of 3?
+- What API should look like? Factory, creating Stack classes, backed by same array, for example.
+
+Solution 1
+
+Stack is a LIFO (Last In First Out) structure. We could reserve indices in blocks of 3.
+stack 1 item 1 = 0
+stack 2 item 1 = 1
+stack 3 item 1 = 2
+stack 1 item 2 = 3
+stack 2 item 2 = 4
+stack 3 item 2 = 5
+
+So stack 1 items will use indices 0, 3, 6, 9, 12, 15
+Stack 2 indices will be 1, 4, 7, 10, 13, 16
+Stack 3 indices will be 2, 5, 8, 11, 14, 17
+
+As we are talking about stack, then add and remove operations will be happening on the left side of array.
+The problem is that lengths of stacks gonna be different. If one stack is much bigger than others, then two thirds of array gonna be empty.
+During add we check, that leftmost corresponding index. If it's not None, we add new block of 3 from the left. If it's None, we iterate until the end of the array, until the end or non-None value and fill empty cell before it.
+During remove we nullify corresponding leftmost non-empty cell. If first block becomes empty, we remove it.
+Runtime O(max(a,b,c)), where a,b,c are lengths of stacks. Memory O(max(a,b,c))
+
+Solution 2
+
+Create container Entry and fields stack_id and data. stack_id will contain the number of the stack and data is for data of that stack.
+Runtime O(a+b+c). Memory O(a+b+c)
+
+Solution 2.1
+
+Instead of creating new class reserve indices in blocks of 2 where first index is used for stack id and the second for data. 
+
+Solution 3
+
+Break array into 3 pieces with two delimeters. First stack is stored before delimeters. Second, between delimeters. Third, after delimeters. Adding and removing will require shifting all the rest elements as before. Runtime O(a+b+c). Memory O(a+b+c)

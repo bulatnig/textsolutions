@@ -1,0 +1,58 @@
+One way: There are three types of edits that can be performed on strings: insert a character, remove a character, or replace a character. Given two strings, write a function to check if they are one edit (or zero edits) away.
+
+Examples
+
+pale, ple -> True
+pales, pale -> True
+pale, bale -> True
+pale, bake -> False
+"", "" -> True
+
+Questions:
+
+- are two empty strings zero edit away? I decided Yes
+- should function be case sensitive or insensitive?
+- what string encoding is used?
+- should we treat different but interchangeable Unicode symbols as the same?
+
+Solution 1.
+
+First thing to check is string lengths. If it's different for more than 1 then we can't get away with 1 edit and return False.
+Strings of the same length. We have to count the number of different character pairs in strings. If it's 0 or 1, then return True, otherwise False.
+One string is shorter and other is longer by one character. Go by shorter string and compare it to longer. If one pair is different, then skip that character from the longer string and compare to the next, after skipping one character the algorithm essentially is the same as above.We can combine these two cases into one. 
+If we finished going through shorter string and got no differences so far, that means they are different only by one extra character at the end, return True.
+Runtime is O(N), extra memory is O(1).
+
+
+Implementation
+
+
+def is_one_way(s1: str, s2: str) -> bool:
+  len_diff = len(s1) - len(s2)
+  if len_diff > 1 or len_diff < -1:
+    return False
+  if len_diff > 0:
+    short_string = s2
+    long_string = s1
+  else:
+    short_string = s1
+    long_string = s2
+  i = 0
+  j = 0
+  character_added = False
+  diff_count = 0
+  while i < len(short_string):
+    if short_string[i] != long_string[j]:
+      diff_count += 1
+      if not character_added and len_diff != 0:
+        j += 1  # emulate character addition by moving cursor over longer string to the next character
+        character_added = True
+        continue
+    i += 1
+    j += 1
+  return True if diff_count < 2 else False
+
+
+
+
+

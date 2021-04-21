@@ -1,0 +1,25 @@
+Route Between Nodes: Given a directed graph, design an algorithm to find out whether there is a route between two nodes.
+
+Examples:
+Is there a route between A and Z
+A - B - Z => true
+Z - B - A => true
+B - A
+  \ Z => false
+A - B - C - D - E - F - G - H
+  \ Y - Z                     => true
+
+C - A
+  \ Z - X
+     \ /
+      Y    => false
+  
+Questions:
+- is it an acyclic graph? No
+
+
+Solution 1
+Start from A, go through all its children recursively until Z is found. If not found, start from Z and go through its children recursively until A is found. To avoid cycles remember visited elements. Breadth-first search might be better than depth-first if it's a big graph and elements are in close proximity. Runtime is O(N) where N is the number of nodes in the graph. Extra memory is O(N) to store visited elements.
+
+Solution 1.1
+Iterate both A and Z children in parallel (Z after A children) because elements can be close to each other but we don't know anything about direction.

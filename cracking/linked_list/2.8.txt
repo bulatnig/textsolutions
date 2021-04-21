@@ -1,0 +1,41 @@
+Loop Detection: Given a circular linked list, implement an algorithm that returns the node at the beginning of the loop.
+Definition
+Circular linked list: A (corrupt) linked list in which a node's next pointer points to an earlier node, so as to make a loop in the linked list.
+
+
+Examples:
+Input: A - B - C - D - E - C (the same)
+Output: C
+
+A - A (the same) => A
+
+
+Questions:
+- what to return in case of empty list input? - None
+
+
+Solution 1
+Iterating through the list and for each element loop through the rest of the list checking if we hit same element again. Runtime O(N * N). Extra memory O(1)
+
+Solution 2
+While iterating through the list put each element into a HashSet. If given element is already there, that's the node at the beginning of the loop. Runtime O(N). Extra memory O(N).
+
+Solution 3
+
+A - B - C - D
+         \ /
+          E
+          
+If we can modify the list. Break the loop. Iterating through the list make each element point to None. When we reach the end of the list it's gonna be our beginning of the loop, pointing to None. So just return last element of the list. Runtime O(N). Extra memory O(1).
+
+
+Implementation
+
+
+def detect_loop(head: Node) -> Optional[Node]:
+  node = head
+  while node.next:
+    tmp = node.next
+    node.next = None
+    node = tmp
+  return node

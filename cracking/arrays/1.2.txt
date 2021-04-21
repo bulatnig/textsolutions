@@ -1,0 +1,51 @@
+Check Permutation: Given two strings, write a method to decide if one is a permutation of the other
+
+Examples:
+
+""     ""      - see answer of the question
+a      a       - equal strings are permutations of each other
+ab     ba      - same characters in different order mean one string is a permutation of another
+a      ab      - strings of different length can't be permutations of each other
+abb	   aab     - length can be the same, but different number of same characters gives us negative result
+abcdef bcfaed  - permutation can be very random in nature
+
+Questions:
+
+- Is one empty string is a permutation of another empty string?
+
+Solutions:
+
+If string lengths are different, then one string can't be a permutation of another.
+
+Solution 1
+If string lengths are equal, sort both strings, then go through the characters of both strings at the same time checking if they are equal. As soon as we find non-matching characters that means one string is not a permutation of another. By the end of the strings return True signifying that one string is a permutation of another. String lengths check same as array length check has O(1) runtime. Sorting is O(N * logN) and for two strings it's still the same runtime. Iterating through strings simultaneously is O(N). Eventual runtime is O(N * logN) with O(1) additional memory.
+
+Best Concievable Runtime is O(N)
+
+Solution 2
+We can use either HashMap or Array with key or index being the code of a character. We iterate through first string and increment indices corresponding to character codes. Then we iterate through the second string and decrement indices. Then we go through counter array. If all values are zeroes then one string is a permutation of another. If we find at least one non-zero value, than strings are not permutations of each other. Runtime of iteration O(N) + O(N) for second string and + O(C) for iteration through counter, where C is the length of the alphabet used. C can be treated as a constant here, because increasing N doesn't affect it. And O(2N) reduces to O(N).
+
+Implementation (of Solution 2)
+
+
+ALPHABET_SIZE = 255 # for ASCII strings
+
+
+def is_permutation(s1: str, s2: str) -> bool:
+  "TODO document function"
+  if len(s1) != len(s2):
+    return False  # strings of non-matching length can't be a permutation of each other
+  if len(s1) == 0:
+    return False  # empty strings are not a permutation of each other
+  counters = [0] * ALPHABET_SIZE
+  for c in s1:
+    idx = ord(c)
+    counters[idx] = counters[idx] + 1
+  for c in s2:
+    idx = ord(c)
+    counters[idx] = counters[idx] - 1
+  for i in counters:
+    if i != 0:
+      return False
+  return True
+

@@ -1,0 +1,76 @@
+Zero Matrix: Write an algorithm such that if an element in an MxN matrix is 0, its entire row and column are set to 0.
+
+Examples
+
+1 2 3 -> 1 0 3
+4 0 6    0 0 0
+7 8 9    7 0 9
+
+ 1  2  3  4  5 ->  1  0  3  0  5
+ 6  7  8  0 10     0  0  0  0  0
+11 12 13 14 15    11  0 13  0 15
+16  0 18 19 20     0  0  0  0  0
+
+
+Questions:
+
+- Is it a matrix of ints, floats or decimals? I'll use int matrix for simplicity
+- What to do in case of -0 or +0 elements?
+
+
+Solution 1. Brute force
+Create output matrix of the same size. Do two iterations:
+- in first iteration copy all non-zero elements
+- in second iteration find zero element and set row and column of output matrix to 0
+Return output matrix. Runtime is O(MxN). Extra memory is O(MxN)
+
+Best Conceiveable Runtime is O(MxN), already optimal. But we can try optimize memory and updates in place.
+
+Solution 2
+
+We can store indices of rows and columns which should be zero in two separate arrays, thus reducing extra memory requirement to O(M+N). 
+Create two arrays, first of M length and second of N length. Iterate through matrix looking for zeroes, and once found set the value of zero_rows array at index corresponding to the row to 1, similarly update the zero_columns array. Then go through zero_rows and zero_columns arrays and set whole rows and columns to zeroes. Runtime complexity O(MxN). Extra memory is O(M+N)
+
+Solution 2.1
+Because we need only to flip 0 to 1, we can use bit vectors instead of arrays for zero_rows and zero_columns.
+
+Solution 2.2
+Instead of going through zero_rows and zero_columns which gives us runtime up to O(3xMxN) we can go through the matrix and check if current row or column should be zero. This will give us O(2xMxN) runtime.
+
+Not solution 3
+
+The problem is that when we find 0 we can't update elements we haven't visited yet, because once we come to them we have no way to identify if it's an input value or result of our update. Solution to this can be update only backwards and when checking next element to look for the adjuscent previous cells.
+
+1 0 3 -> 0 0 0
+4 5 6    4 5 6
+7 8 9    7 8 9
+
+Such approach doesn't work because it doesn't work for first row or column.
+
+
+Implementation
+
+
+def zero_matrix(matrix: list[list[int]]) -> None:
+    "TODO document function"
+    if len(matrix) == 0 or (len(matrix) == 1 and len(matrix[0]) == 1):
+        return
+    M = len(matrix)
+    N = len(matrix[0])
+    zero_rows = [0] * M
+    zero_columns = [0] * N
+    for i in range(0, M):
+        for j in range(0, N):
+            if matrix[i][j] == 0:
+                zero_rows[i] = 1
+                zero_columns[j] = 1
+    for i in range(0, M):
+        if zero_rows[i] == 1:
+            for j in range(0, N):
+                matrix[i][j] = 0
+    for j in range (0, N):
+        if zero_columns[j] == 1:
+            for i in range (0, M):
+                matrix[i][j] = 0
+
+

@@ -1,0 +1,31 @@
+Queue via Stacks: Implement a MyQueue class which implements a queue using two stacks.
+
+Examples:
+
+Questions:
+
+Solution 1
+Stacks only have methods push and pop. Pop removes the newest added element. But Queue has add and remove methods, where remove removes the oldest added element. One way to make it work using stacks is to put everything into first stack. But once pop is called, then put all elements from first stack into second. As a result oldest element of first stack becomes the newest element of second stack. Return it. Move all elements back into first stack. Push runtime is O(1). Pop runtime is O(N) where N is the size of the stack because we have to traverse all elements two times moving them between stacks.
+
+Implementation
+
+
+class MyQueue:
+    def __init__(self):
+        self.stack1 = []
+        self.stack2 = []
+
+    def add(self, item):
+        self.stack1.append(item)
+
+    def remove(self):
+        self._move(self.stack1, self.stack2)
+        item = self.stack2.pop()
+        self._move(self.stack2, self.stack1)
+        return item
+
+    @classmethod
+    def _move(cls, source, target):
+        while source:
+            target.append(source.pop())
+    

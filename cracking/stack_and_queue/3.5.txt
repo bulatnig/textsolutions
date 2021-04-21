@@ -1,0 +1,69 @@
+Sort Stack: Write a program to sort a stack such that the smallest items are on the top. You can use an additional temporary stack, but you may not copy the elements into any other data structure (such as an array). The stack supports the following operations: push, pop, peek and isEmpty.
+
+Examples:
+1 - 2 - 3 -> 3 - 2 - 1
+
+Questions:
+- when you say "smallest items are on the top", do you mean stack actually has to be sorted or do you mean that pop and peek should return the smallest element?
+- sort in place?
+- does stack contain duplicate elements? - If yes, we should remember both index and value of min element to skip it
+
+Solution 1 Lazy sort
+Add everything into permanent stack. When peek is called create temporary stack and move all elements there figuring out the smallest element on the go. Then move elements back and return that value. If pop is called, then skip smallest element when moving the data from temporary to permanent stack. Runtimes: push and isEmpty O(1), pop and peek O(N) where N is the size of the stack.
+
+Solution 2 Eager sort
+When append is called, move all elements from the permanent to temporary stack finding min element which is bigger than value provided. Move stack back into permanent queue, but also put new element into permanent stack when when next biggest found. This way we'll always keep stack sorted that the smallest element is on the top. Runtimes: push is O(N), pop, peek and isEmpty O(1)
+
+Both solutions are viable and one should be chosen based on usage scenario.
+
+Solution 3 sort method
+Iterate permanent stack moving elements to temporary stack. Count the number of elements. Also keep track of the min element. After all moved to temp, move them back. But this time skip element equal to min found. After all elements were moved, add min element.
+Repeat procedure, but next time skip 1 first element which is already smallest as we know. Move N - 1 elements back, skipping the min we found. Move the rest (first min we found)
+Repeat Count - 1 times. Last element will be sorted automatically when we sort previous.
+Runtime O(N * N)
+
+Implementation of solution 2
+
+def sort(stack: List):
+  if not stack:
+    return
+  size = _size(stack)
+  tmp = []
+  for i in range(size - 1):  # last element already sorted
+    # skip already sorted elements
+    for j in range(i):
+      tmp.append(stack.pop())
+    # move and find next min
+    min = stack.pop()
+    tmp.append(min)
+    while stack:
+      item = stack.pop()
+      tmp.append(item)
+      if item < min:
+        min = item
+    # move back and add min at the end
+    for k in range(size - i):
+      item = tmp.pop()
+      if min != item:
+        stack.append(item)
+    stack.append(min)
+    # move back already sorted elements
+    while tmp:
+      stack.append(tmp.pop())
+  
+
+def _size(stack: List) -> int:
+  tmp = []
+  size = 0
+  while stack:
+    tmp.append(stack.pop())
+    size += 1
+  while tmp:
+    stack.append(tmp.pop())
+  return size
+
+
+
+
+
+

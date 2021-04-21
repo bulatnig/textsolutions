@@ -1,0 +1,50 @@
+Is Unique: Implement an algorithm to determine if a string has all unique characters. What if you cannot use additional data structures?
+
+Examples:
+""
+"abcdef"
+"abcba"
+"aaaa"
+
+Questions:
+- what's the encoding of these characters? If Unicode there are characters which can have different code but be actually interchangeable.
+- what to return if input is an empty string?
+
+It it's ASCII:
+
+Brute force solution. A few solutions come to my mind actually.
+
+Solution 1.
+Sort the characters in string, then go character by character and once first duplicate character is met return false (not all characters unique). If we reached the end of the string (or array) then return true (all characters are unique). Runtime O(N * logN) for sorting and O(N) for going through array, which results in O(N * logN). Memory O (1) as no extra memory needed
+
+Solution 2.
+Read string character by character putting each character into a HashMap where key is a character and value is a number of times we've seen this character so far. Once we hit a character which is already present in the map, then we return false. At the end of the string we return true. Reading and putting character into HashMap is O(N) and lookup is O(1), which results in O(N) runtime. We need O(b) extra memory for the Hashmap where b is the alphabet of the string;
+
+Solution 2.1
+We don't need to store any values in HashMap actually, because we are checking only for uniqueness. So HashSet which is anyway based on HashMap but provides better API could perfectly do.
+
+Solution 3.
+We don't need such a complex structure as a HashMap or HashSet actually, if we know the range of values possible. We can create simple fixed size array instead of all 0s. Reading a character we check and update the value in array at the position of the character code if it wasn't met before to 1. If value at that position is already non-zero then we return false. This is the same runtime O(N) and memory O(b) complexity as Solution 2, but more memory efficient and faster.
+
+Solution 3.1
+We can futher improve this solution by using BitSet or bit vector which can only store 0 and 1 values. This solution theoretically gives more memory efficiency, but I'm not sure how it actually works out. Because standard arrays are very heavily optimized in most languages, but bit vector is not such a common structure.
+
+
+Implementation (of solution 3):
+
+MAX_ALPHABET_INDEX = 12345
+
+
+def is_unique(s: str) -> bool:
+  "TODO document"
+  a = [0] * MAX_ALPHABET_INDEX
+  for c in s:
+    idx = ord(c)
+    val = a[idx]
+    if val:
+      return False
+    else:
+      a[idx] = 1
+  return True
+
+

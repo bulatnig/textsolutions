@@ -1,0 +1,27 @@
+String Rotation: Assume you have a method isSubstring which checks if one word is a substring of another. Given two strings, s1 and s2, write code to check if s2 is a rotation of s1 using only one call to isSubstring. "waterbottle" is a rotation of "erbottlewat"
+s1 = xy = waterbottle
+x = wat
+y = erbottle
+s2 = yx = erbottlewat
+
+Examples:
+
+blabla , lablab -> lablablablab
+blabla, blalab -> blalabblalab
+
+Questions:
+
+Solution 1
+If string lengths are different, then one can't be a rotation of another.
+When we combine s2 two times we get "erbottlewaterbottlewat" , which contains original "waterbottle" string inside. This seem to be always true. Runtime is O(N) where N is length of s1 which is equal to s2. Extra space is O(N) as well, because we have to produce new concatenated string
+
+
+Implementation:
+
+
+def is_rotation(s1: str, s2: str) -> bool:
+  if len(s1) != len(s2):
+    return False  # strings of different length can't be rotation of one to another
+  s1s1 = s1 + s1
+  return s2 in s1s1
+

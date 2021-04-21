@@ -1,0 +1,43 @@
+Intersection: Given two (singly) linked lists, determine if two lists intersect. Return the intersecting node. Note that the intersection is defined based on reference, not value. That is, if the kth node of the first list is the exact same node (by reference) as the jth node of the second linked list, then they are intersecting.
+
+Examples:
+
+    a - b - c = b
+d - e - ^
+    
+a - b - c = a
+^
+
+a - b - c = None
+d - e - f
+
+a - b - c = c
+        ^
+        
+Questions:
+- none
+
+
+Solution 1
+Iterate through first linked list comparing each element to each element of second linked list. Return first common element found. Runtime O(a * b). Extra memory is O(1)
+
+Solution 2
+Iterate through first linked list and put its elements into HashSet. Iterate through the second linked list checking each element for presence in HashSet. Return first element matched. Runtime O(a+b). Extra memory is O(a). To reduce extra memory required we want to put smaller linked list into HashSet.
+
+
+Implementation
+
+
+def intersection(head1: Node, head2: Node) -> Optional[Node]:
+    cache = set()
+    node = head1
+    while node:
+        cache.add(node)
+        node = node.next
+    node = head2
+    while node:
+        if node in cache:
+            return node
+        node = node.next
+    return None
+

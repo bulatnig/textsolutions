@@ -1,0 +1,28 @@
+Return Kth to Last: Implement an algorithm to find the Kth to last element of a singly linked list.
+
+Examples:
+
+1,2,3,4,5 3 -> 2
+1,2,3 0 -> 3
+9 0 -> 9
+
+Questions:
+- what to do if K is bigger than list size? I'll suppose, than Kth to last element always present in linked list.
+- I'll also suppose that linked list is always non-empty.
+
+Solution 1
+Jump over K elements using first cursor. Then add second cursor to the head element. Iterate both cursors over list until first cursor hits an end. Return second cursor value. Runtime O(N), extra memory O(1).
+
+Implementation 1
+
+
+def kth_to_last(linked_list: LinkedList, k: int):
+  last = linked_list.head
+  for i in range(0, k):
+    last = last.next
+  kth = linked_list.head
+  while last.next:
+    last = last.next
+    kth = kth.next
+  return kth.data
+
