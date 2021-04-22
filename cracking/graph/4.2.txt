@@ -1,0 +1,55 @@
+Minimal Tree: Given a sorted (increasing order) array with unique integer elements, write an algorithm to create a binary search tree with minimal height.
+
+Examples:
+
+1-2-3-4-5-6-7                      4
+                                2    6
+                               1 3  5 7
+                               
+Questions:
+- none
+
+
+Solution 1
+Take middle element of the array and make it a root element. Middle of the left half will be it's left child and middle of the right half will be it's right child. Algorithm goes recursively until there is only one element. By halving array we'll have equal amount of elements on left and right of the root and thus end up with minimal height. Runtime is O(N) because we have to visit each element. Memory is O(N) because we'll need N recursive calls.
+
+Implementation:
+
+class Node {
+  int value;
+  Node left;
+  Node right;
+  
+  public Node(int value) {
+    this.value = value;
+  }
+}
+
+class Solution {
+
+  /**
+    Convert sorted array into binary search tree.
+    
+    @param array array to convert
+    @param from array index to start from, inclusive
+    @param to array index to finish at, exclusive
+  */
+  public static void to_binary_search_tree(int[] array, int from, int to) {
+    if (from < 0 || to > array.length) {
+      throw new IllegalArgumentException("Incorrect range provided from " + from + " to " + to);
+    }
+    if (from >= to) {
+      return null;
+    }
+    var middle = from + (to - from) / 2;
+    var root = new Node(array[middle]);
+    root.left = to_binary_search_tree(array, from, middle);
+    root.right = to_binary_search_tree(array, middle + 1, to);
+    return root;
+  }
+
+}
+
+Solution.to_binary_search_tree(new int[] {1,2,3,4,5,6,7}, 0, 7);
+
+
