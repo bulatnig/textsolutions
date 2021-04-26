@@ -1,0 +1,63 @@
+List of Depths: Given a binary tree, design an algorithm which creates a linked list of all the nodes at each depth (e.g., if you have a tree with depth D, you'll have D linked lists).
+
+Examples:
+     1               [1]
+  2     3            [2,3] 
+ 4 5   6 7           [4,5,6,7]
+ 
+     1               [1]
+   2   3             [2,3]
+        4            [4]
+         5           [5]
+         
+Questions:
+- Can binary tree be empty (have no nodes)? - No, root node is always non-null
+- Does order of the nodes at each depth matter? - No
+- Should function return a list of lists? - Yes
+
+Solution 1:
+Start at depth 1 (root node). Go through each element and add it to the list. Add children of each element to the next_list. Call this function recursively adding each depth lists to the result until there are no elements to iterate. Runtime O(N) because we have to visit all elements and O(N) result lists memory + O(N) worst case depth of recursive calls => O(N) memory in the end
+
+Best conceivable runtime: to compose lists we have to visit each element at least ones => O (N) is the best runtime.
+
+Implementation:
+
+class Solution {
+
+  private static class Node {
+    private int value;
+    private Node left;
+    private Node right;
+    
+    Node(int value) {
+      this.value = value;
+    }
+  }
+
+    public static List<List<Node>> list_depths(Node node) {
+        if (node == null) {
+            return Collections.emptyList();
+        }
+        List<List<Node>> result = new ArrayList<>();
+        Ex43.list_depth(new LinkedList<>(Collections.singletonList(node)), result);
+        return result;
+    }
+
+    private static void list_depth(LinkedList<Node> nodes, List<List<Node>> result) {
+        if (nodes.isEmpty()) {
+            return;
+        }
+        var childNodes = new LinkedList<Node>();
+        for (Node node : nodes) {
+            if (node.left != null) {
+                childNodes.add(node.left);
+            }
+            if (node.right != null) {
+                childNodes.add(node.right);
+            }
+        }
+        result.add(nodes);
+        list_depth(childNodes, result);
+    }
+
+}
