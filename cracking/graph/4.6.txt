@@ -1,0 +1,56 @@
+Successor: Write an algorithm to find the "next" node (i.e., in-order successor) of a given node in a binary search tree. You may assume that each node has a link to it's parent.
+
+Examples:
+             successor of 3 is 5 - immediate parent
+   10                  of 5 is 8 - immediate right child
+ 5    15               of 8 is 10 - parent of the parent
+3 8  12 17             of 10 is 12 - leftmost child
+      13               of 13 is 15 - parent of left child
+                       of 17 is None - because 
+   1 - no successor
+   
+   1
+        5
+       4
+      3
+     2
+   
+Questions:
+- can input node be null? - No
+- what to return if input node is largest in the tree? - null
+
+Solution 1:
+If node has right child, then leftmost of right children (might be right child itself) is the successor
+If node is a left child, then parent is successor
+If node is a right child, then go through the parents, find one which is left child, and its parent will be successor
+Runtime is O(N) because we might need to traverse all elements in unbalanced tree. Space complexity is O(1) because algorithm doesn't need to store anything.
+
+Implementation
+
+class Ex46 {
+  Node findSuccessor(Node node) {
+    if (node.right != null)
+      return findLeftMostNode(node.right);
+    if (node.parent == null)
+      return null;
+    if (node.parent.left == node)
+      return node.parent;
+    return findParentOfLeftChild(node.parent)
+  }
+  
+  Node findLeftMostNode(Node node) {
+    if (node.left == null)
+      return node;
+    return findLeftMostNode(node.left);
+  }
+  
+  Node findParentOfLeftChild(Node node) {
+    if (node.parent == null) {
+      return null;
+    }
+    if (node.parent.left == node) {
+      return node.parent;
+    }
+    return findParentOfLeftChild(node.parent);
+  }
+}
