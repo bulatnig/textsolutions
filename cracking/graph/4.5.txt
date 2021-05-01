@@ -1,0 +1,64 @@
+Validate BST: Implement a function to check if a binary tree is a binary search tree.
+
+Binary tree node has 0, 1 or 2 child nodes.
+Binary search tree is where left elements of the node is less the node value and right elements are bigger than node's value.
+
+Examples:
+
+   2    - binary search tree  
+  1 3
+  
+   1    - binary tree, but not a search tree
+  2 3
+  
+   10
+ 5    15   - 11 is bigger than 5, but bigger than 10 and thus breaks search tree requirement
+1 11 4  20 - 4 is less than 15, but less than 10 and thus breaks search tree requirement
+
+    5
+      10     - imbalanced, but still perfectly valid binary search tree.
+     7  15
+       12 17
+
+Questions:
+- should function accept root node? - Yes
+- can root node be null? - No
+- is single root node tree a valid binary search tree? - Yes so far
+- are all nodes of the tree unique? - Yes
+- is tree limited to integer values? - Yes
+
+Solution 1
+Use recursive Depth First Search and pass the min, max or both limits the child nodes should comply. Runtime is O(N) because we have to visit all elements. Memory is O(max_depth) because we'll have at max max_depth number of stacks of recursive calls.
+
+Implementation
+
+class Ex45 {
+
+  boolean isBST(Node root) {
+    return checkRecursively(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+  }
+  
+  boolean checkRecursively(Node node, int min, int max) {
+    if (node.value < min || node.value > max) {
+      return false;
+    }
+    if (node.left != null) {
+      if (node.value == Integer.MIN_VALUE) {
+        return false;
+      }
+      if (!checkRecursively(node.left, min, node.value - 1)) {
+        return false;
+      }
+    }
+    if (node.right != null) {
+      if (node.value == Integer.MAX_VALUE) {
+        return false;
+      }
+      if (!checkRecursively(node.right, node.value + 1, max)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+}
