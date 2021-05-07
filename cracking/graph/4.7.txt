@@ -1,0 +1,75 @@
+Build Order: You are given a list of projects and a list of dependencies (which is a list of pairs of projects, where the second project is dependent on the first project). All of a project's dependencies must be built before the project is. Find a build order that will allow the projects to be built. If there is no valid build order, return an error.
+
+Example
+Input:
+  projects: a, b, c, d, e, f
+  dependencies: (a, d), (f, b), (b, d), (f, a), (d, c)
+Output: f, e, a, b, d, c
+
+Questions
+- raise exception or return null in case if valid build order isn't found? - return null
+
+Solution 1
+Build a map with projects as keys and list of projects it depends on as a value. 
+Iterate through it and add all projects with no dependencies to the build queue. 
+Iterate through the build queue. For each item:
+- add to result output list
+- check the map for projects it unblocks. For each unlocked project if all other dependencies are fulfilled, then add them to the build queue.
+Once build queue is empty check that all projects are in result output list. By checking its size for example which should be equal to input projects list size.
+Runtime complexity is O(N * N) if one project is dependant on all other projects. Memory is O(N) to build map of dependencies and also maybe set of built projects to speed up search.
+
+Solution 2
+Build two maps. First is map of project to set of projects depending on it. Second is map of projects to set of projects it depends on.
+Iterate through it and add all projects with no dependencies to the build queue. 
+Iterate through the build queue. For each item:
+- add to result output list
+- check the map for projects it unblocks. For each unlocked project remove item from set of its dependencies. If there is no dependencies left, add project to the build queue
+Once build queue is empty check that all projects are in result output list. By checking its size for example which should be equal to input projects list size.
+Runtime is O(N) because checking and removing from set is O(1). Memory is O(N) to store two maps and built projects set.
+
+Implementation:
+
+class Ex47 {
+
+  String[] findBuildOrder(String[] projects, String[][] dependencies) {
+    Map<String, Set<String>> projectDependencies = new HashMap<>();
+    Map<String, Set<String>> projectUnlocks = new HashMap<>();
+    var locked = new HashSet<String>();
+    for (var project : projects) {
+      projectDependencies.put(project, new HashSet<String>());
+      projectUnlocks.put(project, new HashSet<String>());
+      locked.add(project);
+    }
+    for (var dependency : dependencies) {
+      projectDependencies.get(dependency[1]).add(dependency[0]);
+      projectUnlocks.get(dependency[0]).add(dependency[1]);
+    }
+    var checkQueue = new HashSet<String>();
+    var buildOrder = new ArrayList<String>();
+    for (var entry in projectDependencies.entries()) {
+      if (entry.value().isEmpty()) {
+        checkQueue.add(entry.key());
+        locked.remove(entry.key());
+      }
+    }
+    while (!checkQueue.isEmpty()) {
+      var project = checkQueue.remove();
+      buildOrder.add(project);
+      for (var unlock : projectUnlocks.get(project)) {
+        if (locked.contains(unlock)) {
+          var deps = projectDependencies.get(unlock);
+          deps.remove(project);
+          if (deps.isEmpty()) {
+            checkQueue.add(unlock);
+          }
+        }
+      }
+    }
+    if (projects.length == buildOrder.size()) {
+      return buildOrder.toArray();
+    } else {
+      return null;
+    }
+  }
+  
+}
