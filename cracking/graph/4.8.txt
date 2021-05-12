@@ -1,0 +1,62 @@
+First Common Ancestor: Design an algorithm and write code to find the first common ancestor of two nodes in a binary tree. Avoid storing additional nodes in a data structure. NOTE: This is not necessarily a binary search tree. Pages 110-257
+
+Examples:
+      1         - for nodes 7 and 9 the common ancestor is 2
+   2     3      - for nodes 4 and 10 the common ancestor is 1
+ 4   5    10    - there is no common ancestor for nodes 1 and any other
+6 7 8 9     11
+
+Questions:
+- raise IllegalArgumentException if both nodes provided are the same?
+
+Solution 1
+If one of the two nodes is the root then there can't be any common ancestor.
+If we make nodes of the graph point to their parents. Iterate from the first node to the root and put each parent into a HashMap. Iterate from second node and check each parent for presence in HashMap. Parent present is the first common ancestor. Complexity is O(A+B) where A is number of nodes between first node and common ancestor and B is between second node and ancestor.
+
+Solution 2
+Start searching from root node recursively for one of the two passed nodes. Once found propagate the flag back the call chain. Node, which both left and right children return found flag is the ancestor we are looking for. Complexity is O(N) where N is number of nodes in the binary tree.
+
+Implementation
+
+class Ex48 {
+
+  private static class Node {
+    String value;
+    Node left;
+    Node right;
+    
+    Node(String value) {
+      this.value = value;
+    }
+    
+  }
+
+  // return first common ancestor or null if it doesn't exist
+  Node findFirstCommonAncestor(Node root, Node node1, Node node2) {
+    if (node1 == node2) {
+      throw new IllegalArgumentException("Two different nodes should be provided for search");
+    }
+    if (node1 == root || node2 == root) {
+      return null;  // root can't have common ancestor with any other node
+    }
+    return searchRecursively(root, node1, node2);
+  }
+  
+  Node searchRecursively(Node node, Node node1, Node node2) {
+    if (node1 == node || node2 == node) {
+      return node;
+    }
+    Node leftResult = searchRecursively(node.left, node1, node2);
+    Node rightResult = searchRecursively(node.right, node1, node2);
+    if (leftResult != null && rightResult != null) {
+      return node;  // current node is the common ancestor
+    } else if (leftResult != null) {
+      return leftResult;
+    } else if (rightResult != null) {
+      return rightResult;
+    } else {
+      return null;
+    }
+  }
+
+}
