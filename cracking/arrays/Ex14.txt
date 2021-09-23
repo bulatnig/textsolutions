@@ -1,0 +1,41 @@
+Palindrome Permutation: Given a string, write a function to check if it is a permutation of a palindrome. A palindrome is a word or phrase that is the same forwards and backwards. A permutation is a rearrangement of letters. The palindrome does not need to be limited to just dictionary words.
+
+Example
+Input:  Tact Coa
+Output: True (permutations: "taco cat", "atco cta", etc.)
+
+Solution 1
+Ignore spaces and other non-letter characters.
+For a string to be a palindrome it has to have at max one non-even letter. To check for this we go through the string and count letters. For ASCII we can use an array and for Unicode a HashMap. After that we count a number of non-even letters and return True if it's less than 2. Runtime O(N)
+
+Implementation Java
+
+class Ex14 {
+
+    static boolean isPermutationOfPalindrome(String s) {
+        var counters = new HashMap<Character, Integer>();
+        for (char c : s.toLowerCase().toCharArray()) {
+            if (Character.isLetter(c)) {
+                counters.put(c, counters.getOrDefault(c, 0) + 1);
+            }
+        }
+        var oddChars = counters.values().stream().filter(counter -> counter % 2 == 1).count();
+        return oddChars < 2;
+    }
+  
+}
+
+
+Implementation Python
+
+def is_palindrome_permutation(s: str) -> bool:
+  counters = {}
+  for c in s:
+    if c.isalpha():
+      counters[c] += 1
+  odd_chars = 0
+  for counter in counters:
+    if counter % 2 == 1:
+      odd_chars += 1
+  return odd_chars < 2
+

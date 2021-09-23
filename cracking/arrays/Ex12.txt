@@ -1,0 +1,69 @@
+Check permutation: Given two strings, write a method to decide if one is a permutation of the other
+
+
+Examples:
+a , b
+abcd , dcab
+abc , c
+
+
+Questions:
+What is the output of empty strings input?
+
+
+Solution 1
+If strings are of different size one can't be a permutation of another.
+Then we can sort both strings and compare them to each other.
+Runtime is O(N logN)
+
+Best concievable runtime is 2*N => N
+
+Solution 2
+Go through first string and populate HashMap of character to a number of times it was seen. Then go through the second string and decrement values of HashMap. Finally go through the HashMap and ensure all character values are 0. Runtime is O(N). Memory is O(C) where C is the size of alphabet used.
+
+Solution 2.1
+If we know that the string is ASCII, we can use array of length 256. Use character code to determine the index of array.
+
+
+Implementation Java
+
+class Ex12 {
+  static boolean isPermutation(String s1, String s2) {
+    if (s1.length() != s2.length()) {
+      return false;
+    }
+    var counters = new int[256];
+    for (char c : s1.toCharArray()) {
+      counters[c] += 1;
+    }
+    for (char c : s2.toCharArray()) {
+      counters[c] -= 1;
+    }
+    for (int counter : counters) {
+      if (counter != 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
+
+
+Implementation Python
+
+def is_permutation(s1: str, s2: str) -> bool:
+  if len(s1) != len(s2):
+    return False
+  counters = [0]*256
+  for c in s1:
+    counters[ord(c)] += 1
+  for c in s2:
+    counters[ord(c)] -= 1
+  for counter in counters:
+    if counter != 0:
+      return False
+  return True
+
+
+
+

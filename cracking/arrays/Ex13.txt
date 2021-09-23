@@ -1,0 +1,59 @@
+URLify: Write a method to replace all spaces in a string with '%20'. You may assume that the string has sufficient space at the end to hold the additional characters, and that you are given the "true" length of the string. (Note: If implementing in Java, please use a character array so that you can perform this operation in place.)
+
+
+Examples:
+Input: "Mr John Smith    ", 13
+Output: "Mr%20John%20Smith"
+
+Input " Hi  ", 3
+Output "%20Hi"
+
+Input "World", 5
+Output "World"
+
+
+Solution 1
+Create two pointers: first at the last character of the "true" string, second at the very end of the string. Until they are not pointing to the same index, continue. Check first pointer. If it points to a space, then replace 3 characters left starting from the second pointer. If first pointer points not to space, then copy character to second pointer position and move both pointers one character left.
+Runtime is O(N) where N is the total length of the string.
+
+
+Implementation Java
+
+class Ex13 {
+
+  static void urlify(char[] s, int true_length) {
+    var p1 = true_length - 1;
+    var p2 = s.length - 1;
+    for (; p1 != p2; p1--, p2--) {
+      if (s[p1] == ' ') {
+        s[p2] = '0';
+        p2--;
+        s[p2] = '2';
+        p2--;
+        s[p2] = '%';
+      } else {
+        s[p2] = s[p1];
+      }
+    }
+  }
+}
+
+
+Implementation Python
+
+def urlify(s: List[char], true_length: int) -> None:
+  p1 = true_length - 1
+  p2 = len(s) - 1
+  while p1 != p2:
+    if s[p1] == ' ':
+      s[p2] = '0'
+      p2 -= 1
+      s[p2] = '2'
+      p2 -= 1
+      s[p2] = '%'
+    else:
+      s[p2] = s[p1]
+    p1 -= 1
+    p2 -= 1
+
+

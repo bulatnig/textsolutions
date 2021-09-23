@@ -1,0 +1,43 @@
+String Compression: Implement a method to perform basic string compression using the counts of repeated characters. For example, the string aabcccccaaa would become a2b1c5a3. If the "compressed" string would not become smaller than the original string, your method should return the original string. You can assume the string has only uppercase and lowercase letters (a-z).
+
+Example:
+aabcccccaaa -> a2b1c5a3
+aaa -> a3
+aab -> aab
+
+Questions:
+Return empty string if input is empty.
+
+Solution 1
+Go through the string and compare each character to the previous character. if it's the same, increment a counter. If it's different, write down previous character with the counter and start counting the new characters. After finishing iterating through the string write down the last character and the number of times we saw it. Then compare the lengths of compressed and uncompressed strings and return the shorter one. Runtime is O(N) where N is the length of the string.
+
+
+Implementation
+
+class Ex16 {
+  
+    static String compress(String input) {
+        if (input == null || input.length() == 0) {
+            return input;
+        }
+        var compressed = new StringBuilder();
+        char prev = input.charAt(0);
+        var counter = 1;
+        for (var i = 1; i < input.length(); i++) {
+            char current = input.charAt(i);
+            if (current == prev) {
+                counter++;
+                continue;
+            }
+            compressed.append(prev);
+            compressed.append(counter);
+            prev = current;
+            counter = 1;
+        }
+        compressed.append(prev);
+        compressed.append(counter);
+        return compressed.length() < input.length() ? compressed.toString() : input;
+    }
+  
+}
+

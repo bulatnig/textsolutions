@@ -1,0 +1,43 @@
+Rotate Matrix: Given an image represented by An NxN matrix. where each pixel in the image is 4 bytes. write a method to rotate the image by 90 degrees. Can you do this in place?
+
+
+Example:
+
+123    741
+456 => 852
+789    963
+
+ 1  2  3  4  =>  13  9  5  1
+ 5  6  7  8      14 10  6  2
+ 9 10 11 12      15 11  7  3
+13 14 15 16      16 12  8  4
+
+Solution 1
+Create a new matrix NxN. Starting from bottom left corner (N, 1) becomes (1, 1), (N-1, 1) => (1, 2) ... (1, 1) => (1, N). Then go through (N, 2) to (1, 2) until (N, N) to (1, N)
+
+Solution 2 in place
+Do it in circles, from inside out, or outside in doesn't matter. In clockwise direction move pixels one by one remembering one we replaced in memory.
+           3        9
+1 2 3    1 2 1    1 2 1
+4 5 6 => 4 5 6 => 4 5 6 => 
+7 8 9    7 8 9    7 8 3
+
+
+Implementation
+
+class Ex17 {
+
+    static void rotate(int[][] image) {
+        for (var i = 0; i < image.length / 2; i++) {
+            var end = image.length - 1 - i;
+            for (var j = i; j < end; j++) {
+                var temp = image[i][j];
+                image[i][j] = image[image.length - 1 - j][i];
+                image[image.length - 1 - j][i] = image[image.length - 1 - i][image.length - 1 - j];
+                image[image.length - 1 - i][image.length - 1 - j] = image[j][image.length - 1 - i];
+                image[j][image.length - 1 - i] = temp;
+            }
+        }
+    }
+
+}

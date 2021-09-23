@@ -1,0 +1,105 @@
+Zero Matrix: Write an algorithm such that if an element in an MxN matrix is 0, its entire row and column are set to 0.
+
+Examples:
+
+1 2 => 1 0
+3 0    0 0
+
+1 2 0 4    0 0 0 0
+5 6 7 8 => 5 0 0 8
+9 01011    0 0 0 0
+
+
+Solution 1
+
+Go through an entire matrix first recording rows and columns which should be filled by zeroes. After that go through the matrix again setting all zeroes in rows and columns recorded. Runtime O(MxN). Extra space M+N.
+
+Solution 2
+
+If matrix can't contain negative values, then on 0 detection we can flip sign of all values at that row and column. On second run we can turn all negative values into zeroes.
+
+Solution 3
+
+
+
+
+Implementation
+
+class Ex18 {
+
+    static void zerofy(int[][] matrix) {
+        var zerofyFirstRow = isFirstRowHasZeroes(matrix);
+        var zerofyFirstColumn = isFirstColumnHasZeroes(matrix);
+        reflectZeroesToFirstRowAndColumn(matrix);
+        zerofyColumnsExceptFirst(matrix);
+        zerofyRowsExceptFirst(matrix);
+        if (zerofyFirstRow) {
+            zerofyFirstRow(matrix);
+        }
+        if (zerofyFirstColumn) {
+            zerofyFirstColumn(matrix);
+        }
+    }
+
+    static boolean isFirstRowHasZeroes(int[][] matrix) {
+        for (var i = 0; i < matrix[0].length; i++) {
+            if (matrix[0][i] == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static boolean isFirstColumnHasZeroes(int[][] matrix) {
+        for (var i = 0; i < matrix.length; i++) {
+            if (matrix[i][0] == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void reflectZeroesToFirstRowAndColumn(int[][] matrix) {
+        for (var i = 1; i < matrix.length; i++) {
+            for (var j = 1; j < matrix[0].length; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+    }
+
+    private static void zerofyColumnsExceptFirst(int[][] matrix) {
+        for (var j = 0; j < matrix[0].length; j++) {
+            if (matrix[0][j] == 0) {
+                for (var i = 1; i < matrix.length; i++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    private static void zerofyRowsExceptFirst(int[][] matrix) {
+        for (var i = 0; i < matrix.length; i++) {
+            if (matrix[i][0] == 0) {
+                for (var j = 1; j < matrix[0].length; j++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    private static void zerofyFirstRow(int[][] matrix) {
+        for (var j = 0; j < matrix[0].length; j++) {
+            matrix[0][j] = 0;
+        }
+    }
+
+    private static void zerofyFirstColumn(int[][] matrix) {
+        for (var i = 1; i < matrix.length; i++) {
+            matrix[i][0] = 0;
+        }
+    }
+
+}
