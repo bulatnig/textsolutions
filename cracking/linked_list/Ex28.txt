@@ -1,0 +1,53 @@
+Loop Detection: Given a circular linked list, implement an algorithm that returns the node at the beginning of the loop
+Definition
+Circular linked list: A (corrupt) linked list in which a node's next pointer points to an earlier node, so as to make a loop in the linked list.
+
+Example
+Input: A - B - C - D - E - C
+Output: C
+
+Solution 1
+Traverse the list checking and putting each node into HashMap (or HashSet). If element is already in HashMap, it's the start of the loop, return it.
+Runtime O(N). Memory O(N)
+
+BCR Runtime O(N). Memory O(1) or O(logN) ?
+
+Solution 2
+Create slow and fast pointer. Move slow pointer by one element and fast by two elements. When they meet reset slow pointer to head. And now move them simultaneously by one element until they meet. That node will be beginning of the loop.
+
+Implementation
+
+class Ex28 {
+  static Node {
+    String value;
+    Node next;
+    Node(String value, Node next) {
+      this.value = value;
+      this.next = next;
+    }
+  }
+  
+  static Node findLoopStart(Node head) {
+    var slow = head;
+    var fast = head;
+    while (fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+      if (slow == fast) {
+        break;
+      }
+    }
+    if (fast == null || fast.next == null) {
+      return null;
+    }
+    slow = head;
+    while (slow != fast) {
+      slow = slow.next;
+      fast = fast.next;
+    }
+    return slow;
+  }
+  
+}
+
+

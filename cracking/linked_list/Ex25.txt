@@ -1,0 +1,83 @@
+Sum Lists: You have two numbers represented by a linked list, where each node contains a single digit. The digits are stored in reverse order, such that the 1's digit is at the head of the list. Write a function that adds the two numbers and returns the sum as a linked list.
+
+Example
+
+7 - 1 - 6 + 5 - 9 - 2 => 2 - 1 - 9
+
+Follow up
+Suppose the digits are stored in forward order. Repeat the obove problem.
+
+Example
+
+6 - 1 - 7 + 2 - 9 - 5 => 9 - 1 - 2
+
+Questions;
+Are both numbers always non-negative? - Yes
+
+Solution
+Create a new result list. Iterate through both given lists concurrently and add up corresponding elements. In case of value overflow flip the flag and add extra digit to next element. 
+Handle the following situations:
+ - numbers of different length
+ - same length, but overflow flag is set by last digits summation.
+Runtime O(N + M) where N is length of first list and M is length of second list
+ 
+Follow up Solution 
+Invert lists and apply solution above. Invert result list before returning it.
+
+Implementation
+
+class Ex25 {
+  static class Node {
+    int value;
+    Node next;
+    Node(int value, Node next) {
+      this.value = value;
+      this.next = next;
+    }
+  }
+  
+  static Node sumReverseOrder(Node node1, Node node2) {
+    var fakeHead = new Node(0, null);
+    var pointer = fakeHead;
+    boolean overflow = false;
+    while (overflow || node1 != null || node2 != null) {
+      var sum = 0;
+      if (overflow) {
+        sum += 1;
+        overflow = false;
+      }
+      if (node1 != value) {
+        sum += node1.value;
+        node1 = node1.next
+      }
+      if (node2 != value) {
+        sum += node2.value;
+        node2 = node2.next;
+      }
+      if (sum > 9) {
+        sum -= 10;
+        overflow = true;
+      }
+      pointer.next = new Node(sum, null);
+      pointer = pointer.next;
+    }
+    return fakeHead.next;
+  }
+  
+  static Node sumForwardOrder(Node head1Forward, Node head2Forward) {
+    return reverse(sumReverseOrder(reverse(head1Forward), reverse(head2Forward));
+  }
+  
+  static Node reverse(Node head) {
+    var prev = head;
+    var node = head.next;
+    while (node != null) {
+      var temp = node.next;
+      node.next = prev;
+      prev = node;
+      node = temp;
+    }
+    return prev;
+  }
+  
+}

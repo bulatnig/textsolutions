@@ -1,0 +1,71 @@
+Intersection: Given two (singly) linked lists, determine if the two lists intersect. Return the intersecting node. Note that the intersection is defined based on reference, not value. That is, if the kth node of the first linked list is the exact same node (by reference) as the jth node of the second linked list, then they are intersecting.
+
+Examples:
+
+A -> B -> C -> D -> F
+             /
+     X -> Y 
+
+
+Solution 1
+Iterate through the first list and put all elements into a HashMap (or HashSet). Then iterate through the second list and for each element check if it's in a HashMap. If it is, then return that node. Otherwise return null.
+Runtime O(N+M). Memory O(max(N,M))
+
+Solution 2
+Count the number of elements in both lists by iterating them. Reset pointers to head. Depending on which list is longer move respective pointer by the difference number of elements. Now iterate through both lists and on each step compare corresponding elements. If elements are equal, return it as an intersection node. Otherwise return null in the end.
+Runtime O(N+M). Memory O(1)
+
+Implementation
+
+class Ex27 {
+
+  static class Node {
+    String value;
+    Node next;
+    Node(String value, Node next) {
+      this.value = value;
+      this.next = next;
+    }
+  }
+  
+  static Node findIntersection(Node head1, Node head2) {
+    if (head1 == null || head2 == null) {
+      return null;
+    }
+    var len1 = countElements(head1);
+    var len2 = countElements(head2);
+    var pointer1 = head1;
+    var pointer2 = head2;
+    var diff = len1 - len2;
+    if (diff > 0) {
+      pointer1 = skip(pointer1, diff);
+    } else if (diff < 0) {
+      pointer2 = skip(pointer2, -diff);
+    }
+    do {
+      if (pointer1 == pointer2) {
+        return pointer1;
+      }
+      pointer1 = pointer1.next;
+      pointer2 = pointer2.next;
+    } while (pointer1 != null);
+    return null;
+  }
+  
+  static int countElements(Node node) {
+    var count = 1;
+    while (node.next != null) {
+      node = node.next;
+      count += 1;
+    }
+    return count;
+  }
+  
+  static int skip(Node node, int n) {
+    for (; n > 0; n--) {
+      node = node.next;
+    }
+    return node;
+  }
+
+}

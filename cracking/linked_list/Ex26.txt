@@ -1,0 +1,63 @@
+Palindrome: Implement a function to check if a linked list is a palindrome.
+
+Examples:
+
+a - b - a      => Yes
+a - a          => Yes
+a - b - c - a  => No
+
+BCR = O(N), because we have to visit each element at least once to check if list is still a palindrome.
+
+
+Solution
+
+Count the number of elements in the list. Start from the head of the list and go till the middle flipping element links backward, like this:
+before: a -> b -> a
+after : a <- b -> a
+From the middle go into two directions simultaneously, comparing elements at each step. If discrepancy detected, return false. If reached the ends of list, return true.
+At max one element in the middle might be off. Skip it in comparison.
+
+
+Implementation:
+
+class Ex26 {
+  static class Node {
+    String value;
+    Node next;
+    Node(String value, Node next) {
+      this.value = value;
+      this.next = next;
+    }
+  }
+  
+  static boolean isPalindrome(Node head) {
+    var len = findLength(head);
+    var left = head;                        // a
+    var right = left.next;                  // b
+    for (var i = 1; i < len / 2; i++) {
+      var temp = right.next;                // c
+      right.next = left;                    // b -> a
+      left = right;                         // b
+      right = temp;                         // c
+    }
+    if (len % 2 > 0) {
+      right = right.next;
+    }
+    for (var i = 0; i < len / 2; i++) {
+      if (left.value != right.value) {
+        return false;
+      }
+      left = left.next;
+      right = right.next;
+    }
+    return true;
+  }
+  
+  static int findLength(Node node) {
+    if (node == null) {
+      return 0;
+    }
+    return 1 + findLength(node.next);
+  }
+  
+}
